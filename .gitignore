@@ -2,3 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Vivido log
+vivado.jou
+vivado.log
