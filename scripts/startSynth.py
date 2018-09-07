@@ -6,6 +6,7 @@
 
 import subprocess
 import argparse
+import glob
 import logging
 import ConfigParser
 import sys, os, re
@@ -21,6 +22,11 @@ def run_command(*args):
     logging.info(">$ %s", command)
     os.system(command)
 
+def locate_vivado_base():
+    for path in glob.glob('/opt/[Xx]ilinx/[Vv]ivado'):
+        return path
+    return ''
+
 def vivado_t(version):
     """Validates Xilinx Vivado version number."""
     if not re.match(r'^\d{4}\.\d+$', version):
@@ -35,7 +41,7 @@ def parse_args():
     parser.add_argument('vivado', type=vivado_t, help="xilinx vivado version to run, eg. '2016.4'")
     parser.add_argument('config', type=os.path.abspath, help="build configuration file to read")
     parser.add_argument('--tclfile', default=Tcl_addHlsIpCore, help="file name tcl script for HLS IP core")
-    parser.add_argument('--vivado_base_dir', default=VIVADO_BASE_DIR_DEFAULT, help="default Xilinx Vivado installation location")
+    parser.add_argument('--vivado-base-dir', default=locate_vivado_base(), help="set Xilinx Vivado installation location")
     return parser.parse_args()
 
 def main():
